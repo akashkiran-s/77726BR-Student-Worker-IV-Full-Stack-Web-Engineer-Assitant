@@ -52,7 +52,7 @@ var Chart = (function () {
 
             self.chartObj.draw(dataTable, options);
         },
-        getChartDataURL: function () {
+        getSelectedStocks: function () {
             const stockList = document.getElementById("stockList");
             const els = stockList.getElementsByTagName("li");
             const arr = [];
@@ -61,9 +61,13 @@ var Chart = (function () {
                 const symbol = el.dataset.symbol;
                 arr.push(symbol);
             }
+            return arr;
+        }, getChartDataURL: function () {
+            const arr = Chart.getSelectedStocks();
             const params = new URLSearchParams({
                 "arr": JSON.stringify(arr)
             });
+            console.log(arr);
             let url = ServerAPI.getSymbolDataURL(params);
             return url;
         }, data: async function () {

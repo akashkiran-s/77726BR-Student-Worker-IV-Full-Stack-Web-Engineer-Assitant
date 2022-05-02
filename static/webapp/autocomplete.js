@@ -18,11 +18,15 @@ function autocomplete(inp, getArr) {
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
         /*for each item in the array...*/
+        const stocks = new Set(Chart.getSelectedStocks());
         let arr = await getArr();
         for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
             /*todo: dont allow values which are already present*/
             if (arr[i].substring(0, val.length).toUpperCase() === val.toUpperCase()) {
+                if (stocks.has(arr[i])){
+                    continue;
+                }
                 /*create a DIV element for each matching element:*/
                 b = document.createElement("DIV");
                 /*make the matching letters bold:*/
@@ -35,12 +39,13 @@ function autocomplete(inp, getArr) {
                     /*todo: add to list*/
                     /*insert the value for the autocomplete text field:*/
                     let symbol = this.getElementsByTagName("input")[0].value;
-                    inp.value = symbol;
+                    inp.value = "";
                     const li = document.createElement("li");
-                    li.textContent = inp.value
+                    li.textContent = symbol;
                     li.setAttribute("data-symbol", symbol);
                     const stockListEl = document.getElementById("stockList");
                     stockListEl.appendChild(li);
+                    Chart.drawChart();
                     /*close the list of autocompleted values,
                     (or any other open lists of autocompleted values:*/
                     closeAllLists();
